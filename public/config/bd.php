@@ -6,7 +6,7 @@ class BD {
         if (self::$conexion === null) {
             try {
                 self::$conexion = new PDO(
-                    "mysql:host=localhost;dbname=gestion_incidencias;charset=utf8",
+                    "mysql:host=localhost;dbname=bd_tecticket;charset=utf8",
                     "root",
                     ""
                 );
