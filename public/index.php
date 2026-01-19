@@ -204,11 +204,11 @@ try {
     // =========================
     if ($method === "POST" && $path === "/clientes") {
         require_once __DIR__ . '/src/Controller/ClienteController.php';
-    $data = jsonBody();
-    $controller = new ClienteController();
-    $controller->crear($data);
-    exit;
-}
+        $data = jsonBody();
+        $controller = new ClienteController();
+        $controller->crear($data);
+        exit;
+    }
 
     // =========================
     // 404
