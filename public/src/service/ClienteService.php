@@ -7,9 +7,39 @@ require_once __DIR__ . '/../entity/cliente.php';
 
 class ClienteService {
 
+
+
     public function crearCliente(array $data): void {
 
+    if (!isset($data["nombre"]) || trim($data["nombre"]) === '') {
+        throw new ValidationException("El nombre es obligatorio", "nombre");
+    }
+    if (!isset($data["correo"]) || trim($data["correo"]) === '') {
+        throw new ValidationException("El correo es obligatorio", "correo");
+    }
+    if (filter_var($data["correo"], FILTER_VALIDATE_EMAIL) === false) {
+    throw new ValidationException("El formato del correo no es válido", "correo");
+    }
+    if (!isset($data["usuario"]) || trim($data["usuario"]) === '') {
+    throw new ValidationException("El usuario es obligatorio", "usuario");
+    }
+    if (!isset($data["contrasena"]) || trim($data["contrasena"]) === '') {
+        throw new ValidationException("La contraseña es obligatoria", "contrasena");
+    }
+    $minTamanyo = 6;
+    $maxTamanyo = 12;
+    $longitud = strlen($data["contrasena"]);
+
+    if ($longitud < $minTamanyo) {
+        throw new ValidationException("La contraseña debe tener un minimo de 6 dígitos", "contrasena");
+    }
+    if ($longitud > $maxTamanyo) {
+        throw new ValidationException("La contraseña debe tener como máximo 12 dígitos", "contrasena");
+    }
+
+
         $cliente = new Cliente(
+            
             $data["nombre"],
             $data["correo"],
             $data["usuario"],
