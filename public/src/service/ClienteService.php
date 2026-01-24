@@ -11,6 +11,8 @@ class ClienteService {
 
     public function crearCliente(array $data): void {
 
+     $repo = new ClienteRepository();
+
     if (!isset($data["nombre"]) || trim($data["nombre"]) === '') {
         throw new ValidationException("El nombre es obligatorio", "nombre");
     }
@@ -31,10 +33,22 @@ class ClienteService {
     $longitud = strlen($data["contrasena"]);
 
     if ($longitud < $minTamanyo) {
-        throw new ValidationException("La contraseña debe tener un minimo de 6 dígitos", "contrasena");
+        throw new ValidationException("La contraseña debe tener un minimo de 6 caracteres", "contrasena");
     }
     if ($longitud > $maxTamanyo) {
-        throw new ValidationException("La contraseña debe tener como máximo 12 dígitos", "contrasena");
+        throw new ValidationException("La contraseña debe tener como máximo 12 caracteres", "contrasena");
+    }
+    if (!isset($data["pregunta_seguridad"]) || trim($data["pregunta_seguridad"]) === '') {
+        throw new ValidationException("La pregunta de seguridad es obligatoria", "pregunta_seguridad");
+    }
+    if (!isset($data["respuesta_seguridad"]) || trim($data["respuesta_seguridad"]) === '') {
+        throw new ValidationException("La respuesta de seguridad es obligatoria", "respuesta_seguridad");
+    }
+     if ($repo->existeCorreo($data["correo"])) {
+    throw new DuplicateException("El correo ya existe", "correo");
+    }
+    if ($repo->existeUsuario($data["usuario"])) {
+    throw new DuplicateException("El usuario ya existe", "usuario");
     }
 
 
@@ -49,7 +63,9 @@ class ClienteService {
             $data["empresa"] ?? null
         );
 
-        $repo = new ClienteRepository();
+       
         $repo->crearCliente($cliente);
+
+       
     }
 }
